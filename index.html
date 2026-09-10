@@ -3,1001 +3,445 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vishesh Yadav — Research Assistant at IISc Bangalore. ML, language models, and defense-oriented AI. Creator of CoreRec and BHASA LLM.">
     <title>Vishesh Yadav</title>
     <link rel="icon" type="image/png" href="assets/iisc.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Root styles for genius-level minimalism */
         :root {
             --bg: #ffffff;
             --text: #000000;
             --subtle: rgba(0, 0, 0, 0.7);
             --hint: rgba(0, 0, 0, 0.3);
-            --border: rgba(0, 0, 0, 0.2);
             --accent: #2563eb;
-            --spacing: 2rem;
-            --micro-spacing: 0.5rem;
             --font: 'Playfair Display', serif;
-            --content-width: 90vw;
+            /* scale spacing off viewport height so short laptops dont clip */
+            --pad: clamp(0.5rem, 1.4vh, 1.5rem);
+            --gap: clamp(0.35rem, 1vh, 0.85rem);
+            --card-pad: clamp(0.4rem, 0.9vh, 0.75rem);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        html, body {
+            height: 100%;
+        }
+
         body {
             font-family: var(--font);
             background: var(--bg);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.45;
             font-weight: 400;
             overflow: hidden;
-            height: 100vh;
+            height: 100dvh;
+            max-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
             -webkit-font-smoothing: antialiased;
             transition: background 0.3s ease, color 0.3s ease;
         }
-        
-        /* Ultra-minimal layout */
-        .container {
-            max-width: var(--content-width);
-            height: 100vh;
-            display: grid;
-            grid-template-rows: auto auto 1fr auto;
-            gap: var(--micro-spacing);
-            padding: var(--spacing);
+
+        .shell {
+            width: min(92vw, 980px);
+            height: 100dvh;
+            max-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: var(--gap);
+            padding: var(--pad) clamp(1rem, 4vw, 3rem);
             opacity: 0;
-            animation: fadeIn 0.5s ease-out forwards;
+            animation: fadeIn 0.45s ease-out forwards;
             position: relative;
+            overflow: hidden;
         }
-        
+
         @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
+            to { opacity: 1; }
         }
-        
+
         header {
             text-align: center;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0;
+            flex-shrink: 0;
         }
-        
+
         .profile-pic {
-            width: 80px;
-            height: 80px;
+            width: clamp(48px, 7vh, 72px);
+            height: clamp(48px, 7vh, 72px);
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--hint);
-            margin-bottom: 0.3rem;
+            border: 2px solid var(--hint);
+            margin-bottom: 0.15rem;
         }
-        
-        
+
         .institution-logo {
-            width: 40px;
-            height: 40px;
+            width: clamp(26px, 3.5vh, 36px);
+            height: clamp(26px, 3.5vh, 36px);
             object-fit: cover;
             opacity: 0.9;
             border-radius: 50%;
-            border: 2px solid var(--hint);
+            border: 1.5px solid var(--hint);
         }
-        
+
         .subtitle a {
             text-decoration: none;
             border: none;
         }
-        
+
         h1 {
-            font-size: 2rem;
+            font-size: clamp(1.45rem, 3.2vh, 2.2rem);
             font-weight: 700;
-            margin-bottom: 0.2rem;
-            transform: translateY(-20px);
-            animation: slideIn 0.5s ease-out forwards;
+            margin-bottom: 0.1rem;
+            line-height: 1.15;
         }
-        
+
         .subtitle {
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 1.8vh, 1.15rem);
             color: var(--subtle);
-            transform: translateY(-20px);
-            animation: slideIn 1s 0.3s ease-out forwards;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: var(--micro-spacing);
+            gap: 0.4rem;
         }
-        
-        @keyframes slideIn {
-            to {
-                transform: translateY(0);
-            }
+
+        .meta-line {
+            font-size: clamp(0.75rem, 1.5vh, 0.9rem);
+            color: var(--subtle);
+            margin-top: 0.15rem;
         }
-        
-        /* Theme switch - genius level simplicity */
+
+        .links-row {
+            font-size: clamp(0.75rem, 1.5vh, 0.9rem);
+            margin-top: 0.25rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.35rem 0.55rem;
+        }
+
+        .links-row .sep {
+            color: var(--hint);
+            user-select: none;
+        }
+
         .theme-switch {
             position: absolute;
             right: 0;
             top: 0;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: var(--hint);
             border: none;
             cursor: pointer;
-            transition: transform 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             opacity: 0.4;
-        }
-        
-        .theme-switch svg {
-            width: 20px;
-            height: 20px;
-            stroke: var(--text);
-        }
-        
-        .theme-switch:hover {
-            transform: rotate(20deg);
             transition: transform 0.2s ease;
         }
-        
-        /* Tab navigation */
-        .tab-nav {
-            display: flex;
-            justify-content: center;
-            margin-bottom: var(--micro-spacing);
-            gap: var(--spacing);
-            padding-bottom: 0.1rem;
-            position: relative;
-        }
-        
-        .tab-nav::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            margin: 0 auto;
-            width: 500px;
-            height: .2px;
-            background: rgba(255, 255, 255, 0.4);
-            opacity: 0.5;
-        }
-        
-        
-        .tab-button {
-            background: none;
-            border: none;
-            font-family: var(--font);
-            font-size: 0.9rem;
-            color: var(--subtle);
-            cursor: pointer;
-            padding: var(--micro-spacing);
-            transition: all 0.3s ease;
-            border-bottom: 2px solid transparent;
-        }
-        
-        .tab-button.active {
-            color: var(--text);
-            border-bottom-color: var(--text);
-        }
-        
-        .tab-button:hover {
-            color: var(--text);
-        }
-        
-        /* Subtab navigation */
-        .subtab-nav {
-            display: flex;
-            justify-content: center;
-            margin-bottom: var(--micro-spacing);
-            gap: var(--micro-spacing);
-            flex-wrap: wrap;
-        }
-        
-        .subtab-button {
-            background: none;
-            border: none;
-            font-family: var(--font);
-            font-size: 0.8rem;
-            color: var(--hint);
-            cursor: pointer;
-            padding: 0.3rem 0.6rem;
-            transition: all 0.3s ease;
-            border-bottom: 1px solid transparent;
-        }
-        
-        .subtab-button.active {
-            color: var(--text);
-            border-bottom-color: var(--text);
-        }
-        
-        .subtab-button:hover {
-            color: var(--text);
-        }
-        
-        .subtab-content {
-            display: none;
-        }
-        
-        .subtab-content.active {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing);
-            overflow: hidden;
-        }
-        
-        .subtab-content .column {
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 4px;
-            padding: var(--spacing);
-        }
-        
-        .subtab-content .work-item {
-            position: relative;
-            padding-bottom: var(--micro-spacing);
-        }
-        
-        .subtab-content .work-item:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: rgba(0, 0, 0, 0.1);
-            margin-top: var(--micro-spacing);
-        }
-        
-        /* Content columns with perfect balance */
-        .content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing);
-            overflow: hidden;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: flex;
-            flex-direction: column;
-            gap: var(--micro-spacing);
-            overflow: hidden;
-        }
-        
-        .tab-content.active:not(#projects) {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--spacing);
-        }
-        
-        .overview-container {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing);
-            padding: var(--spacing);
-            margin-top: calc(var(--spacing) * -0.9);
-        }
-        
-        .summary-section {
-            text-align: center;
-            padding: var(--spacing);
-        }
-        
-        .expertise-section {
-            text-align: center;
-            padding: var(--spacing);
-            position: relative;
-        }
-        
-        .expertise-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 1px;
-            background: rgba(0, 0, 0, 0.1);
-        }
-        
-        .summary-section h2,
-        .expertise-section h2 {
-            margin-bottom: var(--micro-spacing);
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            color: var(--text);
-            position: relative;
-        }
-        
-        
-        .summary-section p {
-            font-size: 1rem;
-            line-height: 1.7;
-            max-width: 600px;
-            margin: 0 auto;
-            color: var(--subtle);
-            font-weight: 400;
-        }
-        
-        .expertise-section p {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: var(--micro-spacing);
-            color: var(--subtle);
-        }
-        
-        .column {
-            position: relative;
-        }
-        
-        h2 {
-            font-size: 1.8rem;
-            text-transform: uppercase;
-            color: var(--subtle);
-            margin-bottom: var(--micro-spacing);
-            font-weight: 700;
-            letter-spacing: 0.05em;
+
+        .theme-switch svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--text);
         }
 
-        /* Perfect spacing between work items */
-        .work-item {
-            margin-bottom: var(--micro-spacing);
+        .theme-switch:hover {
+            transform: rotate(20deg);
         }
-        
-        /* Section animations */
-        .summary-section,
-        .expertise-section,
-        .column {
-            opacity: 0;
-            animation: fadeIn 1s 0.5s ease-out forwards;
+
+        .blurb {
+            text-align: center;
+            flex-shrink: 0;
+            max-width: 640px;
+            margin: 0 auto;
+            padding-top: clamp(0.2rem, 0.8vh, 0.6rem);
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
         }
-        
-        .summary-section {
-            animation-delay: 0.3s;
-        }
-        
-        .expertise-section {
-            animation-delay: 0.6s;
-        }
-        
-        .work-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: var(--micro-spacing);
-        }
-        
-        p {
-            font-size: 0.95rem;
+
+        .blurb p {
+            font-size: clamp(0.78rem, 1.55vh, 0.95rem);
             color: var(--subtle);
-            margin-bottom: var(--micro-spacing);
-            line-height: 1.6;
+            margin-bottom: 0.35rem;
         }
-        
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            justify-content: center;
+            margin-top: 0.2rem;
+        }
+
+        .tag {
+            font-size: clamp(0.65rem, 1.3vh, 0.8rem);
+            color: var(--text);
+            border: 1px solid var(--hint);
+            padding: 0.2rem 0.55rem;
+            border-radius: 2px;
+            background: rgba(0, 0, 0, 0.02);
+            letter-spacing: 0.02em;
+        }
+
+        .proof {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.35rem, 1vh, 0.75rem);
+            align-content: center;
+            padding-top: var(--gap);
+        }
+
+        .card {
+            display: flex;
+            gap: 0.45rem;
+            padding: var(--card-pad);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 4px;
+            min-height: 0;
+        }
+
+        .card-logo {
+            width: clamp(28px, 3.8vh, 36px);
+            height: clamp(28px, 3.8vh, 36px);
+            object-fit: contain;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .card h3 {
+            font-size: clamp(0.8rem, 1.6vh, 0.98rem);
+            font-weight: 700;
+            margin-bottom: 0.15rem;
+            line-height: 1.25;
+        }
+
+        .card p {
+            font-size: clamp(0.68rem, 1.35vh, 0.82rem);
+            color: var(--subtle);
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .card a,
+        .more-link {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: none;
+            font-size: clamp(0.65rem, 1.25vh, 0.78rem);
+            font-weight: 500;
+        }
+
+        .card a:hover,
+        .more-link:hover {
+            color: var(--text);
+        }
+
+        .collab {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-top: 0.15rem;
+        }
+
+        .collab a {
+            font-size: clamp(0.6rem, 1.15vh, 0.72rem);
+        }
+
         a {
             color: var(--text);
             text-decoration: none;
             border-bottom: 1px solid var(--hint);
-            transition: border-color 0.3s ease;
+            transition: border-color 0.25s ease;
         }
-        
+
         a:hover {
             border-color: var(--text);
         }
-        
-        /* Genius-level minimalist tags */
-        .tags {
-            margin-top: var(--micro-spacing);
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--micro-spacing);
-            margin-bottom: var(--spacing);
-            justify-content: center;
-        }
-        
-        .tag {
-            font-size: 0.9rem;
+
+        .mail-btn {
+            font-family: var(--font);
+            font-size: inherit;
             color: var(--text);
-            border: 1px solid var(--hint);
-            padding: 8px 16px;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-            background: rgba(0, 0, 0, 0.02);
-            font-weight: 500;
-            letter-spacing: 0.02em;
-        }
-        
-        .tag:hover {
-            background: var(--text);
-            color: var(--bg);
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Minimal icons that convey meaning without clutter */
-        .icon {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            vertical-align: middle;
-            margin-right: var(--micro-spacing);
-            stroke: var(--text);
-            stroke-width: 1px;
-            fill: none;
-        }
-        
-        /* Project logos with circular mask */
-        .project-logo {
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            vertical-align: middle;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        /* Skill bars with refined elegance */
-        .skill-bar {
-            height: 2px;
-            background: var(--hint);
-            margin-bottom: var(--micro-spacing);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .skill-bar::after {
-            content: "";
-            position: absolute;
-            height: 100%;
-            left: 0;
-            top: 0;
-            background: var(--text);
-            width: 0;
-            animation: grow 0.5s ease-out forwards;
+            background: none;
+            border: none;
+            border-bottom: 1px solid var(--hint);
+            cursor: pointer;
+            padding: 0;
+            line-height: inherit;
         }
 
-        @keyframes grow {
-            to {
-                width: 100%;
-            }
+        .mail-btn:hover {
+            border-color: var(--text);
         }
-        
-        .skill-bar.ml::after { width: 95%; }
-        .skill-bar.dl::after { width: 90%; }
-        .skill-bar.nlp::after { width: 85%; }
-        .skill-bar.tf::after { width: 80%; }
-        
-        .skill-label {
-            font-size: 0.9rem;
-            color: var(--text);
-            margin-bottom: var(--micro-spacing);
-            margin-top: var(--spacing);
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            position: relative;
-            padding: var(--micro-spacing) 0;
-        }
-        
-        
-        /* Achievements section */
-        .achievements-container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: var(--spacing);
-        }
-        
-        .achievements-container h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing);
-            text-align: center;
-            color: var(--text);
-        }
-        
-        .achievement-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--spacing);
-            margin-top: var(--spacing);
-        }
-        
-        .achievement-item {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--micro-spacing);
-            padding: var(--micro-spacing);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .achievement-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .achievement-image {
+
+        .foot {
             flex-shrink: 0;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .achievement-logo {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            border-radius: 8px;
-        }
-        
-        .placeholder-image {
-            width: 40px;
-            height: 40px;
-            background: var(--accent);
-            color: white;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.8rem;
-        }
-        
-        .achievement-content {
-            flex: 1;
-        }
-        
-        .achievement-content h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-            color: var(--text);
-        }
-        
-        .achievement-content p {
-            font-size: 0.9rem;
-            color: var(--subtle);
-            margin-bottom: 0.5rem;
-            line-height: 1.5;
-        }
-        
-        .achievement-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        
-        .achievement-link:hover {
-            color: var(--text);
-        }
-        
-        .achievement-links {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .collaborators {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            align-items: center;
-            margin-top: 0.3rem;
-        }
-        
-        .collaborator-label {
-            font-size: 0.8rem;
+            text-align: right;
+            font-size: clamp(0.6rem, 1.2vh, 0.75rem);
             color: var(--hint);
-            font-weight: 500;
+            padding-top: 0.15rem;
         }
-        
-        .collaborator-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        
-        .collaborator-link:hover {
-            color: var(--text);
-        }
-        
-        /* Elegant contact button */
-        .contact {
+
+        .gh-fab {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            bottom: 18px;
+            right: 18px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
             z-index: 100;
             opacity: 0.7;
+            transition: all 0.25s ease;
         }
-        
-        .contact:hover {
+
+        .gh-fab:hover {
+            opacity: 1;
             transform: translateY(-2px);
-            opacity: 1;
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
         }
-        
-        .contact svg {
-            width: 18px;
-            height: 18px;
+
+        .gh-fab svg {
+            width: 16px;
+            height: 16px;
             stroke: var(--text);
-            opacity: 0.8;
         }
-        
-        .contact:hover svg {
-            opacity: 1;
+
+        .gh-fab a {
+            border: none;
+            display: flex;
         }
-        
-        /* Dark theme with perfect contrast */
+
         body.dark {
             --bg: #000000;
             --text: #ffffff;
             --subtle: rgba(255, 255, 255, 0.7);
             --hint: rgba(255, 255, 255, 0.3);
-            --border: rgba(255, 255, 255, 0.2);
             --accent: #60a5fa;
         }
-        
-        body.dark .subtab-content .column {
-            border: 1px solid rgba(255, 255, 255, 0.08);
+
+        body.dark .blurb {
+            border-top-color: rgba(255, 255, 255, 0.1);
         }
-        
-        body.dark .subtab-content .work-item:not(:last-child)::after {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        body.dark .expertise-section::before {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        body.dark .contact {
-            background: rgba(0, 0, 0, 0.3);
+
+        body.dark .card {
             border-color: rgba(255, 255, 255, 0.1);
         }
-        
-        body.dark .contact:hover {
-            background: rgba(0, 0, 0, 0.4);
-            border-color: rgba(255, 255, 255, 0.2);
+
+        body.dark .gh-fab {
+            background: rgba(0, 0, 0, 0.35);
+            border-color: rgba(255, 255, 255, 0.12);
         }
-        
-        
-        /* Responsive genius */
-        @media (min-width: 769px) {
-            .container {
-                padding-left: calc(var(--spacing) * 4);
-                padding-right: calc(var(--spacing) * 4);
-                max-width: 80vw;
+
+        /* short laptop heights — tighten a bit more */
+        @media (max-height: 820px) {
+            .card p {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
             }
-            
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .subtitle {
-                font-size: 1.3rem;
-            }
-            
-            p {
-                font-size: 1rem;
-            }
-            
-            .work-title {
-                font-size: 1.4rem;
-            }
-            
-            .asymmetric-footer {
-                right: calc(var(--spacing) * 2);
+
+            .collab {
+                display: none;
             }
         }
-        
+
+        @media (max-height: 700px) {
+            .profile-pic {
+                width: 42px;
+                height: 42px;
+            }
+
+            .card p {
+                -webkit-line-clamp: 2;
+            }
+        }
+
         @media (max-width: 768px) {
-            .container {
-                height: 100vh;
-                padding: var(--micro-spacing);
-                gap: 0.2rem;
-                overflow: hidden;
+            body {
+                overflow: auto;
+                align-items: flex-start;
+                height: auto;
+                max-height: none;
             }
-            
-            header {
-                margin-bottom: 0;
+
+            .shell {
+                height: auto;
+                max-height: none;
+                min-height: 100dvh;
+                padding: 0.75rem 1rem 2rem;
+                justify-content: flex-start;
+                overflow: visible;
             }
-            
-            .tab-nav {
-                margin-bottom: 0;
-                gap: var(--micro-spacing);
-            }
-            
-            .tab-nav::after {
-                width: 80%;
-                max-width: 300px;
-                left: 0;
-                right: 0;
-                margin: 0 auto;
-            }
-            
-            .tab-button {
-                font-size: 0.8rem;
-                padding: var(--micro-spacing);
-            }
-            
-            .tab-content.active {
-                flex-direction: column;
-                gap: var(--micro-spacing);
-                overflow: hidden;
-                max-height: calc(100vh - 180px);
-            }
-            
-            .tab-content.active:not(#projects) {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .overview-container {
-                max-width: 100%;
-                gap: var(--micro-spacing);
-                padding: var(--micro-spacing);
-                margin-top: calc(var(--micro-spacing) * -0.5);
-            }
-            
-            .summary-section,
-            .expertise-section {
-                padding: var(--micro-spacing);
-                border-radius: 8px;
-            }
-            
-            .summary-section h2,
-            .expertise-section h2 {
-                font-size: 1.1rem;
-            }
-            
-            .summary-section p {
-                font-size: 0.8rem;
-                line-height: 1.6;
-            }
-            
-            .tag {
-                font-size: 0.7rem;
-                padding: 6px 12px;
-            }
-            
-            .skill-label {
-                font-size: 0.8rem;
-            }
-            
-            .expertise-section::before {
-                width: 120px;
-            }
-            
-            .subtab-nav {
-                gap: 0.2rem;
-                margin-bottom: 0.2rem;
-            }
-            
-            .achievements-container {
-                padding: var(--micro-spacing);
-            }
-            
-            .achievements-container h2 {
-                font-size: 1.4rem;
-                margin-bottom: var(--micro-spacing);
-            }
-            
-            .achievement-grid {
+
+            .proof {
                 grid-template-columns: 1fr;
-                gap: var(--micro-spacing);
+                flex: none;
             }
-            
-            .achievement-item {
-                padding: 0.3rem;
+
+            .card p {
+                display: block;
+                -webkit-line-clamp: unset;
+                overflow: visible;
             }
-            
-            .achievement-content h3 {
-                font-size: 1rem;
+
+            .collab {
+                display: flex;
             }
-            
-            .achievement-content p {
-                font-size: 0.8rem;
-            }
-            
-            /* iPhone 15 Pro specific fixes */
-            @media (max-width: 430px) {
-                body {
-                    overflow: auto !important;
-                    align-items: flex-start !important;
-                    padding: 10px 0 !important;
-                    width: 100vw !important;
-                    max-width: 100vw !important;
-                }
-                
-                .container {
-                    height: auto !important;
-                    min-height: 100vh !important;
-                    max-width: 100vw !important;
-                    width: 100% !important;
-                    padding: var(--micro-spacing) !important;
-                    box-sizing: border-box !important;
-                    overflow-x: hidden !important;
-                }
-                
-                .overview-container {
-                    max-height: none !important;
-                    overflow: visible !important;
-                    width: 100% !important;
-                    max-width: 100% !important;
-                    box-sizing: border-box !important;
-                }
-                
-                .summary-section,
-                .expertise-section {
-                    margin-bottom: var(--micro-spacing);
-                    width: 100% !important;
-                    max-width: 100% !important;
-                    box-sizing: border-box !important;
-                }
-                
-                .achievements-container {
-                    width: 100% !important;
-                    max-width: 100% !important;
-                    box-sizing: border-box !important;
-                    padding: var(--micro-spacing) !important;
-                }
-                
-                .achievement-grid {
-                    width: 100% !important;
-                    max-width: 100% !important;
-                    box-sizing: border-box !important;
-                }
-                
-                .achievement-item {
-                    width: 100% !important;
-                    max-width: 100% !important;
-                    box-sizing: border-box !important;
-                }
-            }
-            
-            .achievement-links {
-                gap: 0.5rem;
-            }
-            
-            .collaborators {
-                gap: 0.3rem;
-            }
-            
-            .collaborator-label,
-            .collaborator-link {
-                font-size: 0.7rem;
-            }
-            
-            .subtab-button {
-                font-size: 0.7rem;
-                padding: 0.2rem 0.4rem;
-            }
-            
-            .subtab-content.active {
-                grid-template-columns: 1fr;
-                gap: var(--micro-spacing);
-                overflow: hidden;
-                max-height: calc(100vh - 200px);
-            }
-            
-            .subtab-content .column {
-                padding: var(--micro-spacing);
-                border-radius: 2px;
-            }
-            
-            .work-item {
-                margin-bottom: var(--micro-spacing);
-            }
-            
-            p {
-                margin-bottom: var(--micro-spacing);
-                font-size: 0.7rem;
-            }
-            
-            h1 {
-                font-size: 1.4rem;
-            }
-            
-            .subtitle {
-                font-size: 0.8rem;
-            }
-            
-            .work-title {
-                font-size: 0.9rem;
-            }
-            
-            h2 {
-                font-size: 1.2rem;
-            }
-            
-            .tag {
-                font-size: 0.65rem;
-                padding: 2px 5px;
-            }
-            
-            .skill-label {
-                font-size: 0.7rem;
-            }
-            
-            header p {
-                font-size: 0.7rem;
-                margin-bottom: 0.2rem;
-            }
-            
-            .institution-logo {
+
+            .theme-switch {
                 width: 32px;
                 height: 32px;
-                border-radius: 50%;
-                border: 1px solid var(--hint);
-            }
-            
-            .asymmetric-footer {
-                position: absolute;
-                text-align: right;
-                right: var(--micro-spacing);
-                bottom: var(--micro-spacing);
-                font-size: 0.6rem;
             }
         }
-        
-        .footer {
-            position: relative;
-            text-align: right;
-            padding-top: var(--micro-spacing);
-        }
-        
-        .asymmetric-footer {
-            font-size: 0.8rem;
-            color: var(--hint);
+
+        @media (min-width: 769px) and (max-width: 980px) {
+            .proof {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="shell">
         <header>
             <img src="assets/vishesh.png" alt="Vishesh Yadav" class="profile-pic">
             <h1>Vishesh Yadav</h1>
             <div class="subtitle">
-                <a href="https://iisc.ac.in/" target="_blank"><img src="assets/iisc.png" alt="IISc" class="institution-logo"></a>
+                <a href="https://iisc.ac.in/" target="_blank" rel="noopener noreferrer"><img src="assets/iisc.png" alt="IISc" class="institution-logo"></a>
                 Research Assistant at IISc
             </div>
-            <p><a href="https://iisc.ac.in/" target="_blank">Indian Institute of Science </a> | M.C.A Hons AI | Bangalore, India</p>
-            <p>Email: <a href="mailto:sciencely98@gmail.com">sciencely98@gmail.com</a>, <a href="mailto:vishesh@nvidia.com">vishesh@nvidia.com</a>, <a href="mailto:vishesh@corerec.tech">vishesh@corerec.tech</a></p>
-            <p><a href="https://www.linkedin.com/in/vishesh-yadav-aa7333192/" target="_blank">LinkedIn</a> | <a href="https://drive.google.com/file/d/1TyAimABwDsBt8sPPtd_8DvfoRG1t_Arm/view?usp=share_link" target="_blank">View CV</a></p>
-            <button class="theme-switch" aria-label="Toggle dark mode">
+            <p class="meta-line"><a href="https://iisc.ac.in/" target="_blank" rel="noopener noreferrer">Indian Institute of Science</a> · M.C.A Hons AI · Bangalore</p>
+            <div class="links-row">
+                <button type="button" class="mail-btn" data-u="sciencely98" data-d="gmail.com" title="Open mail client">Email</button>
+                <span class="sep">·</span>
+                <button type="button" class="mail-btn" data-u="vishesh" data-d="nvidia.com" title="Open mail client">NVIDIA</button>
+                <span class="sep">·</span>
+                <button type="button" class="mail-btn" data-u="vishesh" data-d="corerec.tech" title="Open mail client">CoreRec</button>
+                <span class="sep">·</span>
+                <a href="https://www.linkedin.com/in/vishesh-yadav-aa7333192/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <span class="sep">·</span>
+                <a href="https://drive.google.com/file/d/1TyAimABwDsBt8sPPtd_8DvfoRG1t_Arm/view?usp=share_link" target="_blank" rel="noopener noreferrer">CV</a>
+            </div>
+            <button class="theme-switch" aria-label="Toggle dark mode" type="button">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="5"></circle>
                     <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -1011,536 +455,143 @@
                 </svg>
             </button>
         </header>
-        
-        <div class="tab-nav">
-            <button class="tab-button active" data-tab="overview">Overview</button>
-            <button class="tab-button" data-tab="achievements">Achievements</button>
-            <button class="tab-button" data-tab="projects">Projects & Research</button>
-        </div>
-        
-        <div class="tab-content active" id="overview">
-            <div class="overview-container">
-                <div class="summary-section">
-                    <h2>Summary</h2>
-                    <div class="work-item">
-                        <p>I am a Research Assistant at the Department of <a href="https://cds.iisc.ac.in/" target="_blank">Computational and Data Sciences (CDS)</a>, <a href="https://iisc.ac.in/" target="_blank">Indian Institute of Science (IISc)</a> Bangalore, where I work as a member of the <a href="https://airexlab.cds.iisc.ac.in/" target="_blank">AIREX Lab</a> under the guidance of <a href="https://cds.iisc.ac.in/faculty/sashi/" target="_blank">Prof. Sashikumaar Ganesan</a>. My research lies at the intersection of computational modeling, language modeling, and machine learning, with a focus on defense-oriented applications in collaboration with the Defence Research and Development Organisation (DRDO).</p>
-                    </div>
-                </div>
-                
-                <div class="expertise-section">
-                    <h2>Technical Expertise</h2>
-                    <p>Specializing in machine learning and deep learning with expertise in transformer architectures, RNNs, CNNs, and language models. Proficient in NLP, Edge AI, and model optimization.</p>
-                    
-                    <div class="tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">C++</span>
-                        <span class="tag">TensorFlow</span>
-                        <span class="tag">PyTorch</span>
-                        <span class="tag">AxLearn</span>
-                    </div>
-                    
-                    <div class="skill-label">Machine Learning • Deep Learning • NLP • Transformers</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="achievements">
-            <div class="achievements-container">
-                
-                <div class="achievement-grid">
-                    <div class="achievement-item">
-                        <div class="achievement-image">
-                            <img src="assets/apple.png" alt="Apple AxLearn" class="achievement-logo">
-                        </div>
-                        <div class="achievement-content">
-                            <h3>Contributor to Apple's AxLearn</h3>
-                            <p>Improved model accuracy and stability in Apple's internal AxLearn framework by contributing to quantize testing modules and fixing core SSM evaluation flows.</p>
-                            <div class="achievement-links">
-                                <a href="https://github.com/apple/axlearn/pull/737" target="_blank" class="achievement-link">Thread</a>
-                                <a href="https://github.com/apple/axlearn" target="_blank" class="achievement-link">GitHub</a>
-                            </div>
-                            <div class="collaborators">
-                                <a href="https://www.linkedin.com/in/jiarui-lu/" target="_blank" class="collaborator-link">Jiarui Lu</a>
-                                <a href="https://github.com/ruomingp" target="_blank" class="collaborator-link">Ruoming Pang</a>
-                                <a href="https://github.com/markblee" target="_blank" class="collaborator-link">Mark Lee</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="achievement-item">
-                        <div class="achievement-image">
-                            <img src="assets/cr.png" alt="CoreRec" class="achievement-logo">
-                        </div>
-                        <div class="achievement-content">
-                            <h3>Creator of CoreRec</h3>
-                            <p>Achieved 30,000+ downloads for a custom-built recommendation engine framework with support for deep learning and graph-based models.</p>
-                            <a href="https://corerec.tech" target="_blank" class="achievement-link">Visit CoreRec</a>
-                        </div>
-                    </div>
-                    
-                    <div class="achievement-item">
-                        <div class="achievement-image">
-                            <img src="assets/nvidia.png" alt="NVIDIA" class="achievement-logo">
-                        </div>
-                        <div class="achievement-content">
-                            <h3>Part of  TEGRA Team at NVIDIA</h3>
-                            <p>Contributed to projects at the intersection of machine learning and Autonomous Vehicles Driving in the TEGRA team.</p>
-                            <a href="https://www.nvidia.com/en-in/self-driving-cars/data-center/" target="_blank" class="achievement-link">Learn More</a>
-                        </div>
-                    </div>
-                    
-                    <div class="achievement-item">
-                        <div class="achievement-image">
-                            <img src="assets/oioi.png" alt="BHASA LLM" class="achievement-logo">
 
-                            <!-- <div class="placeholder-image">oioi</div> -->
-                        </div>
-                        <div class="achievement-content">
-                            <h3>Creator of oioi</h3>
-                            <p>Ranked among Top 30 macOS utilities for developing "oioi" – a lightweight clipboard overlay used by hundreds of daily users.</p>
-                            <a href="https://oioi.top" target="_blank" class="achievement-link">Visit oioi</a>
-                        </div>
-                    </div>
-                    
-                    <div class="achievement-item">
-                        <div class="achievement-image">
-                            <img src="assets/bhasha.png" alt="BHASA LLM" class="achievement-logo">
-                        </div>
-                        <div class="achievement-content">
-                            <h3>Developer of BHASA LLM</h3>
-                            <p>Designing a State Space Model–based architecture (MAMBA) for training scalable language models.</p>
-                            <a href="https://bhasha.tech/research/" target="_blank" class="achievement-link">View Research</a>
-                        </div>
-                    </div>
-                    
-                    <div class="achievement-item">
-                        <div class="achievement-image">
-                            <img src="assets/iisc.png" alt="IISc" class="achievement-logo">
-                        </div>
-                        <div class="achievement-content">
-                            <h3>Research at IISc</h3>
-                            <p>Working in Prof. Sashikumar Ganesan's AIREX Lab at the intersection of finite element methods, language modeling, and computational fluid dynamics.</p>
-                            <a href="https://cds.iisc.ac.in/" target="_blank" class="achievement-link">View Department</a>
-                        </div>
-                    </div>
-                    
-                    <div class="achievement-item">
-                        <div class="achievement-image">
-                            <div class="placeholder-image">AI</div>
-                        </div>
-                        <div class="achievement-content">
-                            <h3>Deep Neural Networks Expert</h3>
-                            <p>Built and trained Deep Neural Networks on large-scale datasets with focus on recommendation systems, graph models, and sequence modeling.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="achievement-item">
-                        <div class="achievement-image">
-                            <div class="placeholder-image">OS</div>
-                        </div>
-                        <div class="achievement-content">
-                            <h3>Open Source Contributor</h3>
-                            <p>Active in Open Source and Research, working on projects spanning FPGA-based AI acceleration, medical NLP systems, and multilingual AI.</p>
-                        </div>
-                    </div>
-                </div>
+        <section class="blurb">
+            <p>
+                At <a href="https://cds.iisc.ac.in/" target="_blank" rel="noopener noreferrer">CDS</a>,
+                <a href="https://airexlab.cds.iisc.ac.in/" target="_blank" rel="noopener noreferrer">AIREX Lab</a>
+                (Prof. <a href="https://cds.iisc.ac.in/faculty/sashi/" target="_blank" rel="noopener noreferrer">Sashikumaar Ganesan</a>),
+                working on computational + language modeling with DRDO-facing applications.
+                Also building open tooling around recommenders and SSMs.
+            </p>
+            <div class="tags">
+                <span class="tag">Python</span>
+                <span class="tag">C++</span>
+                <span class="tag">PyTorch</span>
+                <span class="tag">TensorFlow</span>
+                <span class="tag">AxLearn</span>
+                <span class="tag">NLP</span>
+                <span class="tag">Edge AI</span>
             </div>
-        </div>
-        
-        <div class="tab-content" id="projects">
-            <div class="subtab-nav">
-                <button class="subtab-button" data-subtab="collaborations">Experiences</button>
-                <button class="subtab-button active" data-subtab="research">Research</button>
-                <button class="subtab-button" data-subtab="frameworks">Frameworks</button>
-                <button class="subtab-button" data-subtab="applications">Applications</button>
-            </div>
-            
-            <div class="subtab-content active" id="research">
-                <div class="column">
-                    <h2>Current Research</h2>
-                    
-                    <div class="work-item">
-                        <div class="work-title"><a href="https://iisc.ac.in/" target="_blank">IISc</a> CDS Research</div>
-                        <p>Research Assistant at <a href="https://iisc.ac.in/" target="_blank">IISc</a> Bangalore, AIREX Lab under <a href="https://cds.iisc.ac.in/faculty/sashi/" target="_blank">Prof. Sashikumaar Ganesan</a>. Focus on computational modeling and language modeling for defense applications.</p>
-                        <div class="tags">
-                            <span class="tag">Computational Modeling</span>
-                            <span class="tag">Language Models</span>
-                            <span class="tag">Defense AI</span>
-                        </div>
-                    </div>
-                    
-                    <div class="work-item">
-                        <div class="work-title">DRDO Collaboration</div>
-                        <p>Defense-oriented applications in collaboration with DRDO. Machine learning research for national security applications including threat detection and autonomous systems.</p>
-                        <div class="tags">
-                            <span class="tag">National Security</span>
-                            <span class="tag">Threat Detection</span>
-                            <span class="tag">Autonomous Systems</span>
-                        </div>
+        </section>
+
+        <section class="proof" aria-label="Selected work">
+            <article class="card">
+                <img src="assets/apple.png" alt="Apple" class="card-logo">
+                <div>
+                    <h3>Apple AxLearn</h3>
+                    <p>Contributed quantize testing and SSM eval fixes that improved accuracy/stability in Apple's AxLearn.</p>
+                    <a href="https://github.com/apple/axlearn/pull/737" target="_blank" rel="noopener noreferrer">PR</a>
+                    <span class="sep"> · </span>
+                    <a href="https://github.com/apple/axlearn" target="_blank" rel="noopener noreferrer">Repo</a>
+                    <div class="collab">
+                        <a href="https://www.linkedin.com/in/jiarui-lu/" target="_blank" rel="noopener noreferrer">Jiarui Lu</a>
+                        <a href="https://github.com/ruomingp" target="_blank" rel="noopener noreferrer">Ruoming Pang</a>
+                        <a href="https://github.com/markblee" target="_blank" rel="noopener noreferrer">Mark Lee</a>
                     </div>
                 </div>
-                
-                <div class="column">
-                    <h2>Research Focus</h2>
-                    
-                    <div class="work-item">
-                        <div class="work-title"><img src="assets/bhasha.png" alt="BHASA" class="project-logo"><a href="https://bhasha.tech/research/" target="_blank">BHASA LLM</a></div>
-                        <p>Developing BHASA LLM using MAMBA architecture. Research on state space models, Bayesian approaches, and efficient AI architectures with sustainable applications.</p>
-                        <div class="tags">
-                            <span class="tag">MAMBA Architecture</span>
-                            <span class="tag">State Space Models</span>
-                            <span class="tag">Bayesian AI</span>
-                        </div>
-                    </div>
-                    
-                    <div class="work-item">
-                        <div class="work-title">Edge AI Research</div>
-                        <p>Optimizing AI models for edge devices with focus on real-time processing, model compression, and hardware acceleration for defense applications.</p>
-                        <div class="tags">
-                            <span class="tag">Edge Computing</span>
-                            <span class="tag">Model Compression</span>
-                            <span class="tag">Real-time AI</span>
-                        </div>
-                    </div>
+            </article>
+
+            <article class="card">
+                <img src="assets/cr.png" alt="CoreRec" class="card-logo">
+                <div>
+                    <h3>CoreRec</h3>
+                    <p>Recommendation framework with deep + graph models. <strong>38k+ PyPI downloads</strong>.</p>
+                    <a href="https://corerec.tech" target="_blank" rel="noopener noreferrer">corerec.tech</a>
                 </div>
-            </div>
-            
-            <div class="subtab-content" id="frameworks">
-                <div class="column">
-                    <h2>Core Frameworks</h2>
-                    
-                    <div class="work-item">
-                        <div class="work-title"><img src="assets/cr.png" alt="CoreRec" class="project-logo">CoreRec Framework</div>
-                        <p>A custom framework similar to PyTorch/TensorFlow for recommender systems. Provides modules to build scalable recommendation systems with DNG scoring. <a href="https://corerec.tech" target="_blank">CoreRec</a> has over 22,000 installations.</p>
-                        <div class="tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">Recommendation Systems</span>
-                            <span class="tag">DNG Scoring</span>
-                            <span class="tag">22K+ Installs</span>
-                        </div>
-                    </div>
-                    
-                    <div class="work-item">
-                        <div class="work-title">Custom ML Pipeline</div>
-                        <p>Built end-to-end machine learning pipelines for defense applications, including data preprocessing, model training, and deployment optimization.</p>
-                        <div class="tags">
-                            <span class="tag">ML Pipeline</span>
-                            <span class="tag">Data Preprocessing</span>
-                            <span class="tag">Model Deployment</span>
-                        </div>
-                    </div>
+            </article>
+
+            <article class="card">
+                <img src="assets/nvidia.png" alt="NVIDIA" class="card-logo">
+                <div>
+                    <h3>NVIDIA TEGRA</h3>
+                    <p>ML work for autonomous driving — data prep and model-side support on the TEGRA / DriveNet side.</p>
+                    <a href="https://www.nvidia.com/en-in/self-driving-cars/data-center/" target="_blank" rel="noopener noreferrer">NVIDIA AV</a>
                 </div>
-                
-                <div class="column">
-                    <h2>Technical Stack</h2>
-                    
-                    <div class="work-item">
-                        <div class="work-title">Deep Learning Frameworks</div>
-                        <p>Expertise in PyTorch, TensorFlow, and custom implementations. Specialized in transformer architectures, RNNs, CNNs, and state space models.</p>
-                        <div class="tags">
-                            <span class="tag">PyTorch</span>
-                            <span class="tag">TensorFlow</span>
-                            <span class="tag">Transformers</span>
-                            <span class="tag">Custom Implementation</span>
-                        </div>
-                    </div>
-                    
-                    <div class="work-item">
-                        <div class="work-title">Optimization Techniques</div>
-                        <p>Advanced model optimization including quantization, pruning, and knowledge distillation for efficient deployment on edge devices.</p>
-                        <div class="tags">
-                            <span class="tag">Model Quantization</span>
-                            <span class="tag">Pruning</span>
-                            <span class="tag">Knowledge Distillation</span>
-                        </div>
-                    </div>
+            </article>
+
+            <article class="card">
+                <img src="assets/bhasha.png" alt="BHASA LLM" class="card-logo">
+                <div>
+                    <h3>BHASA LLM</h3>
+                    <p>SSM / MAMBA-style language model work — scalable training, Bayesian angles, efficiency.</p>
+                    <a href="https://bhasha.tech/research/" target="_blank" rel="noopener noreferrer">Research</a>
                 </div>
-            </div>
-            
-            <div class="subtab-content" id="applications">
-                <div class="column">
-                    <h2>AI Applications</h2>
-                    
-                    <div class="work-item">
-                        <div class="work-title"><img src="assets/sl.png" alt="SLYRIC" class="project-logo">SLYRIC Project</div>
-                        <p>Created <a href="https://github.com/vishesh9131/SLYRIC" target="_blank">SLYRIC</a> (Sign Language Yielding Realtime Intelligent Classifier) as an independent project for real-time sign language classification, optimized for edge devices.</p>
-                        <div class="tags">
-                            <span class="tag">Computer Vision</span>
-                            <span class="tag">Real-time Processing</span>
-                            <span class="tag">Accessibility</span>
-                            <span class="tag">Edge AI</span>
-                        </div>
-                    </div>
-                    
-                    <div class="work-item">
-                        <div class="work-title">Autonomous Vehicle AI</div>
-                        <p>Worked on DriveNet for autonomous vehicles at NVIDIA, focusing on data preprocessing and model optimization for real-time decision making.</p>
-                        <div class="tags">
-                            <span class="tag">Autonomous Vehicles</span>
-                            <span class="tag">Computer Vision</span>
-                            <span class="tag">Real-time AI</span>
-                        </div>
-                    </div>
+            </article>
+
+            <article class="card">
+                <img src="assets/oioi.png" alt="oioi clipboard utility" class="card-logo">
+                <div>
+                    <h3>oioi</h3>
+                    <p>Lightweight macOS clipboard overlay; landed in Top 30 utilities, hundreds of daily users.</p>
+                    <a href="https://oioi.top" target="_blank" rel="noopener noreferrer">oioi.top</a>
                 </div>
-                
-                <div class="column">
-                    <h2>Specialized Applications</h2>
-                    
-                    <div class="work-item">
-                        <div class="work-title">Defense AI Systems</div>
-                        <p>Developing AI systems for defense applications including threat detection, autonomous navigation, and decision support systems.</p>
-                        <div class="tags">
-                            <span class="tag">Threat Detection</span>
-                            <span class="tag">Autonomous Navigation</span>
-                            <span class="tag">Decision Support</span>
-                        </div>
-                    </div>
-                    
-                    <div class="work-item">
-                        <div class="work-title">NLP Applications</div>
-                        <p>Natural language processing applications for defense communication, document analysis, and multilingual text processing.</p>
-                        <div class="tags">
-                            <span class="tag">NLP</span>
-                            <span class="tag">Document Analysis</span>
-                            <span class="tag">Multilingual</span>
-                        </div>
-                    </div>
+            </article>
+
+            <article class="card">
+                <img src="assets/sl.png" alt="SLYRIC" class="card-logo">
+                <div>
+                    <h3>SLYRIC</h3>
+                    <p>Realtime sign-language classifier, tuned for edge devices. Independent accessibility project.</p>
+                    <a href="https://github.com/vishesh9131/SLYRIC" target="_blank" rel="noopener noreferrer">GitHub</a>
                 </div>
-            </div>
-            
-            <div class="subtab-content" id="collaborations">
-                <div class="column">
-                    <!-- <h2>Industry</h2> -->
-                    
-                    <div class="work-item">
-                        <div class="work-title"><img src="assets/apple.png" alt="Apple" class="project-logo">Apple Collaboration</div>
-                        <p>Working with <a href="https://github.com/farzadab/intraLanguageInterfaces" target="_blank">Farzad Abdolhosseini</a> on Intra Language Interfaces. Successfully merged contributions to Apple's <a href="https://github.com/apple/axlearn" target="_blank">AXLearn</a>, optimizing model architecture and testing.</p>
-                        <div class="tags">
-                            <span class="tag">Apple AXLearn</span>
-                            <span class="tag">Model Optimization</span>
-                            <span class="tag">Open Source</span>
-                        </div>
-                    </div>
-                    
-                    <div class="work-item">
-                        <div class="work-title"><img src="assets/nvidia.png" alt="NVIDIA" class="project-logo">NVIDIA TEGRA Team</div>
-                        <p>Worked at <a href="https://www.nvidia.com/en-in/self-driving-cars/data-center/" target="_blank">NVIDIA</a> in the TEGRA Team preprocessing data to train DriveNet for autonomous vehicle driving.</p>
-                        <div class="tags">
-                            <span class="tag">NVIDIA TEGRA</span>
-                            <span class="tag">DriveNet</span>
-                            <span class="tag">Data Preprocessing</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="column">
-                    <!-- <h2>Academic</h2> -->
-                    
-                    <div class="work-item">
-                        <div class="work-title"><a href="https://iisc.ac.in/" target="_blank">IISc</a> AIREX Lab</div>
-                        <p>Research collaboration with Indian Institute of Science, AIREX Lab under Prof. Sashikumaar Ganesan, focusing on computational modeling and AI research.</p>
-                        <div class="tags">
-                            <span class="tag"><a href="https://iisc.ac.in/" target="_blank">IISc</a> Bangalore</span>
-                            <span class="tag">AIREX Lab</span>
-                            <span class="tag">Academic Research</span>
-                        </div>
-                    </div>
-                    
-                    <div class="work-item">
-                        <div class="work-title">DRDO</div>
-                        <p>Working with Defence Research and Development Organisation for defense-oriented AI applications and national security research.</p>
-                        <div class="tags">
-                            <span class="tag">DRDO</span>
-                            <span class="tag">Defense Research</span>
-                            <span class="tag">National Security</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <div class="asymmetric-footer">© 2025 Vishesh Yadav</div>
-        </div>
+            </article>
+        </section>
+
+        <div class="foot">© 2025 Vishesh Yadav</div>
     </div>
-    
-    <div class="contact">
-        <a href="https://github.com/vishesh9131" target="_blank" aria-label="GitHub">
+
+    <div class="gh-fab">
+        <a href="https://github.com/vishesh9131" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
             </svg>
         </a>
     </div>
-    
+
     <script>
-        // Auto theme based on time
-        function setThemeByTime() {
-            const hour = new Date().getHours();
-            const isDarkTime = hour >= 18 || hour < 6; // 6 PM to 6 AM
-            
-            if (isDarkTime) {
+        // theme: prefer saved, else roughly night = dark
+        function applyThemeFromClock() {
+            var hour = new Date().getHours();
+            var night = hour >= 18 || hour < 6;
+            document.body.classList.toggle('dark', night);
+            localStorage.setItem('theme', night ? 'dark' : 'light');
+        }
+
+        function bootTheme() {
+            var saved = localStorage.getItem('theme');
+            if (saved === 'dark') {
                 document.body.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
+            } else if (saved === 'light') {
                 document.body.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            }
-        }
-        
-        // Initialize theme from localStorage or time
-        function initializeTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            
-            if (savedTheme) {
-                // Use saved theme preference
-                if (savedTheme === 'dark') {
-                    document.body.classList.add('dark');
-                } else {
-                    document.body.classList.remove('dark');
-                }
             } else {
-                // No saved preference, use time-based theme
-                setThemeByTime();
+                applyThemeFromClock();
             }
         }
-        
-        // Manual theme toggle
-        const themeSwitch = document.querySelector('.theme-switch');
-        if (themeSwitch) {
-            themeSwitch.addEventListener('click', () => {
+
+        var themeBtn = document.querySelector('.theme-switch');
+        if (themeBtn) {
+            themeBtn.addEventListener('click', function () {
                 document.body.classList.toggle('dark');
                 localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
             });
         }
-        
-        // Initialize theme on page load
-        initializeTheme();
-        
-        // Auto-detect overflow and enable scrolling for mobile
-        function checkOverflow() {
-            const container = document.querySelector('.container');
-            const body = document.body;
-            
-            // Check if content overflows the viewport
-            const containerHeight = container.scrollHeight;
-            const viewportHeight = window.innerHeight;
-            const isOverflowing = containerHeight > viewportHeight;
-            
-            if (isOverflowing) {
-                // Enable scrolling
-                body.style.overflow = 'auto';
-                body.style.alignItems = 'flex-start';
-                body.style.padding = '20px 0';
-                body.style.width = '100vw';
-                body.style.maxWidth = '100vw';
-                container.style.height = 'auto';
-                container.style.minHeight = '100vh';
-                container.style.maxWidth = '100vw';
-                container.style.width = '100%';
-                container.style.overflowX = 'hidden';
-                container.style.boxSizing = 'border-box';
-            } else {
-                // Keep scrolling disabled
-                body.style.overflow = 'hidden';
-                body.style.alignItems = 'center';
-                body.style.padding = '0';
-                body.style.width = '100vw';
-                body.style.maxWidth = '100vw';
-                container.style.height = '100vh';
-                container.style.minHeight = '100vh';
-                container.style.maxWidth = '100vw';
-                container.style.width = '100%';
-                container.style.overflowX = 'hidden';
-                container.style.boxSizing = 'border-box';
-            }
+
+        bootTheme();
+
+        // stitch mailto from split bits so the full addr isnt sitting in the html
+        function stitchMail(btn) {
+            return btn.getAttribute('data-u') + '@' + btn.getAttribute('data-d');
         }
-        
-        // Check overflow on load and resize
-        window.addEventListener('load', () => {
-            setTimeout(checkOverflow, 500);
-        });
-        
-        window.addEventListener('resize', () => {
-            setTimeout(checkOverflow, 100);
-        });
-        
-        // Check overflow when tab content changes (will be handled in tab switching)
-        
-        // Force enable scrolling on mobile devices
-        function isMobileDevice() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                   window.innerWidth <= 768;
-        }
-        
-        if (isMobileDevice()) {
-            setTimeout(() => {
-                const container = document.querySelector('.container');
-                if (container.scrollHeight > window.innerHeight * 0.8) {
-                    document.body.style.overflow = 'auto';
-                    document.body.style.alignItems = 'flex-start';
-                    document.body.style.padding = '20px 0';
-                    document.body.style.width = '100vw';
-                    document.body.style.maxWidth = '100vw';
-                    container.style.height = 'auto';
-                    container.style.minHeight = '100vh';
-                    container.style.maxWidth = '100vw';
-                    container.style.width = '100%';
-                    container.style.overflowX = 'hidden';
-                    container.style.boxSizing = 'border-box';
+
+        document.querySelectorAll('.mail-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var addr = stitchMail(btn);
+                // try copy first (nice when mail client is flaky), then open mailto
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(addr).catch(function () {});
                 }
-            }, 1000);
-        }
-        
-        // Update theme every minute
-        setInterval(setThemeByTime, 60000);
-        
-        // Tab switching functionality
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons and contents
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-                
-                // Add active class to clicked button
-                button.classList.add('active');
-                
-                // Show corresponding content
-                const targetTab = button.getAttribute('data-tab');
-                const targetContent = document.getElementById(targetTab);
-                if (targetContent) {
-                    targetContent.classList.add('active');
-                }
-                
-                // Check overflow after tab change
-                setTimeout(checkOverflow, 200);
-            });
-        });
-        
-        // Subtab switching functionality
-        const subtabButtons = document.querySelectorAll('.subtab-button');
-        const subtabContents = document.querySelectorAll('.subtab-content');
-        
-        subtabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all subtab buttons and contents
-                subtabButtons.forEach(btn => btn.classList.remove('active'));
-                subtabContents.forEach(content => content.classList.remove('active'));
-                
-                // Add active class to clicked button
-                button.classList.add('active');
-                
-                // Show corresponding content
-                const targetSubtab = button.getAttribute('data-subtab');
-                const targetContent = document.getElementById(targetSubtab);
-                if (targetContent) {
-                    targetContent.classList.add('active');
-                }
-                
-                // Check overflow after subtab change
-                setTimeout(checkOverflow, 200);
+                window.location.href = 'mailto:' + addr;
             });
         });
     </script>
