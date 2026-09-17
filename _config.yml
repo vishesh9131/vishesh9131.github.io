@@ -10,8 +10,7 @@ contact_note: >
   For research and collaboration inquiries, email is the best way to reach me.
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
   Data Scientist and researcher at IISc working on machine learning, language models, and defense-oriented AI.
-footer_text: >
-  Built with <a href="https://github.com/alshedivat/al-folio" target="_blank">al-folio</a> and hosted on <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+footer_text: ""
 keywords: Vishesh Yadav, machine learning, language models, radar deinterleaving, recommender systems, IISc
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
 icon: 🧠 # the emoji used as the favicon (alternatively, provide image name in /assets/img/)

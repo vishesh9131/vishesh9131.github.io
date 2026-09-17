@@ -6,10 +6,11 @@ email: sciencely98@gmail.com
 github_username: vishesh9131
 linkedin_username: vishesh-yadav-aa7333192
 scholar_userid: phrSN0YAAAAJ
+youtube_id: VisheshYadav-9975
 rss_icon: true
 # wechat_qr: # filename of your wechat qr-code saved as an image (e.g., wechat-qr.png if saved to assets/img/wechat-qr.png)
 # whatsapp_number: # your WhatsApp number (full phone number in international format. Omit any zeroes, brackets, or dashes when adding the phone number in international format.)
 custom_social:
   logo: /assets/img/vishesh.png
   title: CoreRec
-  url: https://corerec.tech
+  url: https://corerec.online/

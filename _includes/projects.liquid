@@ -1,0 +1,20 @@
+<div class="col project-card-column">
+  <a class="project-card-link" href="{% if project.redirect %}{{ project.redirect }}{% else %}{{ project.url | relative_url }}{% endif %}"{% if project.redirect %} target="_blank" rel="noopener noreferrer"{% endif %}>
+    <article class="card project-card h-100 hoverable">
+      {% if project.img %}
+        {% include figure.liquid loading="eager" path=project.img sizes="(min-width: 768px) 33vw, 100vw" alt=project.title class="card-img-top project-card-image" %}
+      {% endif %}
+      <div class="card-body">
+        <p class="project-kicker">{{ project.category | replace: '-', ' ' }}</p>
+        <h2 class="card-title">{{ project.title }}</h2>
+        <p class="card-text">{{ project.description }}</p>
+        {% if project.highlights %}
+          <ul class="project-highlights" aria-label="Project technologies">
+            {% for highlight in project.highlights %}<li>{{ highlight }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+        <span class="project-cta">{% if project.redirect %}Visit project{% else %}Read case study{% endif %} <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></span>
+      </div>
+    </article>
+  </a>
+</div>
