@@ -1,0 +1,243 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Tokenizers Are All We Need | Vishesh Yadav </title> <meta name="author" content="Vishesh Yadav"> <meta name="description" content="A grounded walkthrough of tokenization and its impact on model behavior."> <meta name="keywords" content="Vishesh Yadav, machine learning, language models, radar deinterleaving, recommender systems, IISc"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%A7%A0&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=3116ba77db9ee1581d05bb3e86fbf7f1"> <link rel="canonical" href="https://vishesh9131.github.io/blog/2025/tokenizers-are-all-we-need/"> <script src="/assets/js/theme.js?v=5286c3e4c334d0ecb8fc0c40ff4fa7ec"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> Vishesh Yadav </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/cv/">CV </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Tokenizers Are All We Need</h1> <p class="post-meta"> Created on November 07, 2025 </p> <p class="post-tags"> <a href="/blog/2025"> <i class="fa-solid fa-calendar fa-sm"></i> 2025 </a>   ·   <a href="/blog/tag/tokenization"> <i class="fa-solid fa-hashtag fa-sm"></i> tokenization</a>   <a href="/blog/tag/llm"> <i class="fa-solid fa-hashtag fa-sm"></i> LLM</a>   <a href="/blog/tag/mamba"> <i class="fa-solid fa-hashtag fa-sm"></i> Mamba</a>   ·   <a href="/blog/category/research"> <i class="fa-solid fa-tag fa-sm"></i> research</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <h1 id="sitting-outside-iisc-freezing-a-little-thinking-about-tokenizers">Sitting Outside IISc, Freezing a Little, Thinking About Tokenizers</h1> <p>I wrapped up my work and i am sitting in front of the main building of the Indian institute of science…its so soothing cold the winds of november are giving my mind thrills…</p> <p>Ok so we are about to talk about tokenizers today!!! Why does it come to mind??? As we go through reading foundational models …”How LLMs understand english is one of the many questions readers come around!”</p> <p>And tokenizer is what breaks sentences into tiny tokens, tokens are not words, not characters not syllables, tokens are subword units chosen to make the entire text space efficient to represent. The cleverness and strategy while tokenizing the corpus we take decides how well our model is able to grasp the context and generate the next token with a good tpc (tokens per character)(lower is better) ohhhh what’s tpc now!!!! …calm down we will talk about this now, it’s just a simple measure of how much total token your model can generate divided by the total number of characters in the text…</p> <p>For example : if the gpt-pro-max can generate 11 tokens for the sentence “Who is Ramanujan??” and on the other side gpt-potato generates 23 tokens for the same sentence..can you spot the time and space complexity which version of gpt will take more??? Yes you got it, that’s gpt-potato… because to represent a entity he is taking more chars then gpt-pro-max….</p> <p>Yeah moving forward while keeping the tone of discussion light we will talk and in between i will keep making you know the further concepts tokenizers are associated with or famous tokenizers how they cleverly make text space efficient.</p> <p>You must be wondering how they look, is there any pattern or symmetry between them…</p> <p>If you are not thinking this, okay be calm i will make you think. You see every tokenizer when get trained it makes a finite list of tokens that finite list of tokens we called vocabulary and using that we make every words which is in the text space so just like 26 alphabet is vocab of english lang…Tokenizers invent an alphabet, but the letters are allowed to be as big or as weird as they want, as long as the final reconstruction cost stays small.</p> <p>According to some notable papers , they reveal promising benchmarks on upgrading and working on optimization of tokenizers as we know earlier researchers were only interested in thinking about optimizing the architecture or inventing one… This is how impactful tokenizers can be!!!!!</p> <hr> <h2 id="encode-decode-logic">Encode Decode Logic</h2> <p>Tokenizers are bound by a deterministic rule which is very senseful, just like when you translate a sentence in hindi , it should not get changed when you translate it back to english. Similarly when we tokenize the corpus of text we expect the same text corpus if we “"”detokenize”””” it in future. detokenize wired words right!!! that’s why we introduce encode and decode nomenclature … when you tokenize something you are encoding it and decoding it when you need your corpus back to its original state.</p> <p>Great now you become a geek who knows basis of toeknizers…lets take this article further and i will discuss you about some of the coolest topics, my friends who 1 year back sit on a placement they were telling me interviewers are really interested if one knows about modules which makes generative models work …everyone knows how gpt works right transformers transformers transformers but knowing what qkv scoring is , knowing how multi head attention is being computed or knowing the working of positional encoding is what keeps your answers and replies in placement healthy…</p> <p>Just like i told you about tpc…there are so many entities to judge these tokenizers we call it Tokenization cost metrics….you are sitting in a MAANG interview for gen ai JD and interviewer is not asking TCM….thats where your dream will break and you are not really giving an interview…lol</p> <hr> <h2 id="tpc-tpw-entropy-oov">TPC, TPW, Entropy, OOV</h2> <p>Ok back to the topic! I told you how tpc can judge which tokenizer is efficient and cost effective similarly we are blessed with more TCMs like: Token Per Word (TPW), Tokenization Entropy, OOV Rate (Out-of-Vocabulary)…</p> <p>We will discuss one by one ; just like TPC tells us how expensive a tokenizer is for a language…TPW helps readers gauge efficiency quickly but according to me it’s less scientific. “WHYWHY VISHESH???” I dont know!!!! It just doesn’t feel scientific to me.</p> <p>I am so unpredictable lol..just like me there is a term to judge how unpredictable the token boundaries are for that language and tokenizer that is called Tokenization Entropy. And for domain specific writing like medicine or cook book to make veg food, How often tokenizers fail to represent a term and have to back off to characters is called its OOV Rate aks Out-of-Vocabulary Rate.</p> <hr> <h2 id="some-under-the-hood-ideas">Some Under-the-hood Ideas</h2> <p>Now there are some more concepts which do matter in terms of tokenizers but works under the hood , i have written their definition you can read if you like:</p> <ul> <li> <strong>Sub-word Segmentation</strong> : Every modern tokenizer relies on the idea..Instead of whole words, break text into the most useful word-pieces.</li> <li> <strong>Merge Algorithms</strong> : How tokenizers decide which word-pieces deserve to become tokens.</li> <li> <strong>Frequency-driven Compression</strong> : All common tokenizers are compression schemes pretending to be linguistic.</li> </ul> <hr> <h2 id="main-tokenizer-families">Main Tokenizer Families</h2> <p>NOW NOW NOW We will talk …oh who switched my speaker off! Ok …. NOW NOW NOW WE WILL TALK ABOUT THE MAIN TOKENIZER FAMILIES AND THEIR WORKING..huh that was lowd.</p> <p>One of the earliest used tokenizers was Byte-Pair Encoding(BPE) used in GPT-2/3, BLOOM…and working on these will cost me a whole new article so I will give you an intuition!</p> <hr> <h2 id="bpe-intuition">BPE Intuition</h2> <p>BPE starts with characters -&gt; counts which pair of characters appear together the most -&gt; merge those pairs and treat them as a single symbol(merge tables) -&gt; repeat 100000+ times -&gt;Final merges -&gt; become the vocabulary.</p> <p>Merge table is an ordered list of pair-merge decisions the tokenizer learned during training.</p> <p>It’s simple, deterministic, and compresses well, but it struggles with languages where words morph heavily.</p> <p>It looks like this:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0: ("e", "r") → "er"
+1: ("pl", "ay") → "play"
+2: ("play", "er") → "player"
+3: ("player", "s") → "players"
+</code></pre></div></div> <h3 id="example-of-how-encodings-uses-the-merge-table-in-bpe">Example of how Encodings uses the Merge Table in BPE:</h3> <p><strong>Start text</strong> = token</p> <p><strong>Merge table it formes:</strong></p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1: ("t", "o") → "to"
+7: ("k", "e") → "ke"
+10: ("to", "k") → "tok"
+52: ("ke", "n") → "ken"
+100: ("tok", "en") → "token"
+</code></pre></div></div> <p><strong>possible_doubt</strong> : why not (“e”,”n”) -&gt; “en”</p> <p>Because merging a pair in a merge table is not logical! BPE never decides merges based on logic.It only follows the statistics of the training corpus.</p> <p><strong>Encodings happens like:</strong></p> <ul> <li>First look for the earliest merge number that applies.</li> <li>Merge that pair</li> <li>Keep going</li> <li>Eventually, it might end up with the full token “token” if enough rules exist.</li> </ul> <hr> <h2 id="sentencepiece--unigram-lm">SentencePiece / Unigram LM</h2> <p>Google has a famous library called Sentence piece where they have introduced Unigram Language Model Tokenizer, using which all the LLaMA family is trained on!!!</p> <p>So unlike BPE instead of merging it starts with a giant list of candidate sub-words and trains a probabilistic model. The goal of the model “what is the most likely set of subwords that explains all sentences???” and iteratively prunes the vocabulary.</p> <p>It handles multilingual and weird morphology better than BPE. It generates multiple possible tokenizations and picks the best.</p> <p>But google didn’t come up with sentence pieces in the first place Early google models like BERT, DistilBERT were trained on different tokenizers known as WordPiece. Its where Google was transitioning their aura form BPE to Unigram LM Tokenizer.</p> <p>So that transition development is what they call WordPiece. It’s very similar to BPE but with different scoring objectives, they asked “if I add this subword to vocabulary will it help me to explain my text better?????” and thats all maximize likelihood really meant.</p> <p>WordPiece aften ads “##” markers to show subword continuations. People still talk about this because it introduced the idea that tokenization can be tightly coupled with the LM’s training data.</p> <hr> <h2 id="byte-level-bpe">Byte-Level BPE</h2> <p>I told you BPE was used in GPT-2 / 3…OpenAI really took tokenizers seriously and while hunting they found Byte-Level BPE they have used in GPT4 and Mistral also comes into account for using Byte-Level BPE.</p> <p>How does it work ?? same as bpe, but it starts from raw bytes(0-255) instead of characters.that means every piece of text is representable thus no OOVs. It became dominant because now it can handle emojis, accents, programming languages, and rare symbols effortlessly.</p> <hr> <h2 id="tiktoken--gpt-4-encodings">TikToken / GPT-4 Encodings</h2> <p>But now OpenAI uses there own tokenizers they call it tiktoken / GPT-4’s Encodings As it introduces modern pretokenization rules, special tokens, optimized merges, extreme speed by memory mapped tables; i will talk about this now …</p> <p>People says tiktoken is nothing but “BPE but fast” that’s very surface level…because underneath, there are a few design moves that make these tokenizers behave cleaner, tighter, and more predictable than classical BPE.</p> <hr> <h3 id="pretokenization-rules">Pretokenization Rules</h3> <p>Pretokenization Rules ie OpenAI tokenizers don’t treat raw text as-is. They apply collapsing weird whitespaces patterns into std ones, normalizing some unicode edge cases, treating punctuation in more consistent way, spitting boundaries around certain characters…its not like full normalization (like NFKC) it’s more like “Fix the obvious inconsistencies but don’t destroy meaning.”</p> <hr> <h3 id="special-tokens">Special Tokens</h3> <p>Special Tokens : Gpt model rely on a fairly rich set of reserved tokens i.e. end-of-text, beginning-of-assistant message, beginning-of-user-message, system prompts, document seperators, bye-level fallbacks and some metadata tokens for chat formatting… It’s not at all impressive right, but together they let the model understand where a conversation turn begins, what role a segment plays, and how to differentiate data from instructions.</p> <p>Older tokenizers basically ignored structure, tiktoken has just baked structure into vocabulary itself</p> <hr> <h3 id="optimized-merge-table">Optimized Merge Table</h3> <p>Optimized Merge Table : You know BPE generates very large, redundant, slow scan merge tables.OpenAI reworks this table into something extremely compact and efficiently indexable.Every merge is packed in a way that reduces cache misses and speeds up lookup time during encoding.</p> <hr> <h3 id="memory-mapped-tables">Memory-Mapped Tables</h3> <p>Memory-Mapped Tables for Speed : I can say this is pure system engineering, Instead of loading merge rules into RAM and parsing them at runtime, tiktokenn uses memory mapped files: the OS loads the pages you actually touch, random access is extremely fast, zero copy overhead.</p> <hr> <h3 id="soft-normalization">Soft Normalization</h3> <p>Soft Normalization : This is the part most people are not aware of. Older BPE tokenizers got wrecked by slight Unicode variations: smart quotes, accent marks, zero-width spaces, exotic whitespace… All these caused fragmentation, meaning the tokenizer produced way too many tokens for the same concept.</p> </div> </article> <br> <hr> <br> <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2> <p class="mb-2">Here are some more articles you might like to read next:</p> <ul class="list-disc pl-7 my-3 space-y-2 marker:text-[var(--global-theme-color)]"> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/llms-counting-digits-not-storing-a-number-line/">LLMs Count Digits, Not Store a Number Line</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/when-llms-multiply/">When LLMs Multiply</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2025/why-india-needs-its-own-llms/">Why India Needs Its Own LLMs</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2023/diving-deep-into-the-mamba-model-implementation/">Diving Deep into the Mamba Model Implementation</a> </li> </ul> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Vishesh Yadav. Built with <a href="https://github.com/alshedivat/al-folio" target="_blank" rel="external nofollow noopener">al-folio</a> and hosted on <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. </div> </footer> <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "about",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/";
+    },
+  },{id: "nav-blog",
+          title: "blog",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/blog/";
+          },
+        },{id: "nav-publications",
+          title: "publications",
+          description: "publications by categories in reversed chronological order. generated by jekyll-scholar.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/publications/";
+          },
+        },{id: "nav-projects",
+          title: "projects",
+          description: "Selected research systems and open-source work.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/projects/";
+          },
+        },{id: "nav-cv",
+          title: "CV",
+          description: "This is a description of the page. You can modify it in &#39;_pages/cv.md&#39;. You can also change or remove the top pdf download button.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/cv/";
+          },
+        },{id: "post-llms-count-digits-not-store-a-number-line",
+        
+          title: "LLMs Count Digits, Not Store a Number Line",
+        
+        description: "Constraint tests on how language models represent numerical magnitude.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/llms-counting-digits-not-storing-a-number-line/";
+          
+        },
+      },{id: "post-when-llms-multiply",
+        
+          title: "When LLMs Multiply",
+        
+        description: "Right ballpark, wrong answer - and what hidden states reveal.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/when-llms-multiply/";
+          
+        },
+      },{id: "post-tokenizers-are-all-we-need",
+        
+          title: "Tokenizers Are All We Need",
+        
+        description: "A grounded walkthrough of tokenization and its impact on model behavior.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/tokenizers-are-all-we-need/";
+          
+        },
+      },{id: "post-why-india-needs-its-own-llms",
+        
+          title: "Why India Needs Its Own LLMs",
+        
+        description: "Why language models need cultural and linguistic grounding in India.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/why-india-needs-its-own-llms/";
+          
+        },
+      },{id: "post-diving-deep-into-the-mamba-model-implementation",
+        
+          title: "Diving Deep into the Mamba Model Implementation",
+        
+        description: "A technical exploration of implementing Mamba in PyTorch.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/diving-deep-into-the-mamba-model-implementation/";
+          
+        },
+      },{id: "news-contributed-quantization-test-and-evaluation-fixes-to-apple-axlearn",
+          title: 'Contributed quantization-test and evaluation fixes to Apple AxLearn.',
+          description: "",
+          section: "News",},{id: "news-recognized-as-academic-topper-at-lovely-professional-university-39-s-12th-convocation",
+          title: 'Recognized as Academic Topper at Lovely Professional University&amp;#39;s 12th Convocation.',
+          description: "",
+          section: "News",},{id: "news-started-as-a-data-scientist-on-the-iisc-drdo-research-project-in-bengaluru",
+          title: 'Started as a Data Scientist on the IISc-DRDO research project in Bengaluru.',
+          description: "",
+          section: "News",},{id: "projects-aware",
+          title: 'Aware',
+          description: "Multi-agent LLM orchestration with structured tool calling.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/aware/";
+            },},{id: "projects-apple-axlearn",
+          title: 'Apple AxLearn',
+          description: "Contributions to quantization testing and evaluation stability.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/axlearn/";
+            },},{id: "projects-bhasa-llm",
+          title: 'BHASA LLM',
+          description: "Research and writing on efficient language models for India.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/bhasa-llm/";
+            },},{id: "projects-corerec",
+          title: 'CoreRec',
+          description: "Open-source recommendation framework for deep, graph, and sequence models.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/corerec/";
+            },},{id: "projects-oioi",
+          title: 'oioi',
+          description: "Lightweight macOS clipboard overlay.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/oioi/";
+            },},{id: "projects-radar-pulse-deinterleaving",
+          title: 'Radar pulse deinterleaving',
+          description: "Transformer representations for emitter separation and tracking.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/radar-pulse-deinterleaving/";
+            },},{id: "projects-slyric",
+          title: 'SLYRIC',
+          description: "Real-time sign-language classification for edge devices.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/slyric/";
+            },},{id: "projects-vish",
+          title: 'VISH',
+          description: "Transformer-based syntactic interpretation and pattern mapping.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/vish/";
+            },},{
+        id: 'social-cv',
+        title: 'CV',
+        section: 'Socials',
+        handler: () => {
+          window.open("/assets/pdf/Vishesh_Yadav_Resume.pdf", "_blank");
+        },
+      },{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%73%63%69%65%6E%63%65%6C%79%39%38@%67%6D%61%69%6C.%63%6F%6D", "_blank");
+        },
+      },{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/vishesh9131", "_blank");
+        },
+      },{
+        id: 'social-linkedin',
+        title: 'LinkedIn',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.linkedin.com/in/vishesh-yadav-aa7333192", "_blank");
+        },
+      },{
+        id: 'social-scholar',
+        title: 'Google Scholar',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://scholar.google.com/citations?user=phrSN0YAAAAJ", "_blank");
+        },
+      },{
+        id: 'social-rss',
+        title: 'RSS Feed',
+        section: 'Socials',
+        handler: () => {
+          window.open("/feed.xml", "_blank");
+        },
+      },{
+        id: 'social-custom_social',
+        title: 'Custom_social',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://corerec.tech", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script> <script src="/assets/al_search/js/shortcut-key.js"></script> </body> </html>
