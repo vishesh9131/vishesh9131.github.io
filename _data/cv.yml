@@ -1,0 +1,100 @@
+cv:
+  name: Vishesh Yadav
+  label: Data Scientist and ML Researcher
+  email: sciencely98@gmail.com
+  location: Bengaluru, India
+  summary: Data Scientist at IISc building robust machine-learning systems for sequence modeling, language models, and defense-oriented applications.
+
+  social_networks:
+    - network: GitHub
+      username: vishesh9131
+    - network: LinkedIn
+      username: vishesh-yadav-aa7333192
+    - network: Google Scholar
+      username: phrSN0YAAAAJ
+
+  sections:
+    Experience:
+      - company: Indian Institute of Science (IISc) - DRDO Project
+        position: Data Scientist
+        location: Bengaluru, India
+        start_date: 2025-08
+        end_date: present
+        highlights:
+          - Built a pre-LayerNorm Transformer for radar pulse deinterleaving, mapping Pulse Descriptor Word trains to per-pulse embeddings for emitter separation.
+          - Owned metric learning and clustering evaluation with triplet loss, HDBSCAN, and AMI, ARI, NMI, and V-measure; a protocol fix improved median ARI from about 0.36 to 0.575.
+          - Scaled research using multi-GPU DDP, synthetic PDW corpora, streaming HDF5 loaders, and DRDO ETF transfer and fine-tuning.
+          - Implemented multi-emitter tracking baselines and sequence classifiers with reproducible evaluation and experiment tracking.
+
+    Open Source:
+      - company: Apple AxLearn
+        position: Contributor
+        location: Remote
+        start_date: 2024-11
+        end_date: 2024-11
+        highlights:
+          - Improved AQT quantization test coverage and resolved evaluation issues in Apple's modular deep learning research framework.
+          - Collaborated with maintainers on review and merging of the contribution.
+      - company: Apple IntraLanguageInterfaces
+        position: Contributor
+        location: Remote
+        start_date: 2024-06
+        end_date: 2024-06
+        highlights:
+          - Contributed to ML infrastructure for interfaces that allow code to work across languages.
+
+    Education:
+      - institution: Lovely Professional University
+        location: Jalandhar, Punjab, India
+        area: Machine Learning
+        studyType: Master of Computer Applications (Honours)
+        start_date: 2023
+        end_date: 2025
+        score: CGPA 9.2 - Academic Topper
+      - institution: D.P. Chhaturvadi College
+        location: Seoni, Madhya Pradesh, India
+        area: Mathematics
+        studyType: Bachelor of Science
+        start_date: 2019
+        end_date: 2022
+        score: CGPA 8.8
+      - institution: SECT Computers
+        location: Seoni, Madhya Pradesh, India
+        area: Computer Applications
+        studyType: Diploma in Computer Applications
+        start_date: 2021
+        end_date: 2022
+        score: CGPA 7.5
+
+    Skills:
+      - name: Machine learning
+        keywords: PyTorch, JAX, Flax, TensorFlow, Keras, PyTorch Geometric, AxLearn, MaxText
+      - name: Programming
+        keywords: Python, C++, Java, SQL, R, MATLAB
+      - name: Systems
+        keywords: Docker, Kubernetes, Git, CI/CD, DDP, NVIDIA A6000 GPUs
+      - name: Language-model applications
+        keywords: LangChain, vLLM, RAG, state space models, sequence modeling
+      - name: Data
+        keywords: Pandas, NumPy, Matplotlib, Power BI
+
+    Awards:
+      - title: Academic Topper, 12th Convocation
+        awarder: Lovely Professional University
+        date: 2025
+        summary: Highest cumulative academic performance across the graduating cohort.
+      - title: Product Hunt - #5 Product of the Day
+        awarder: Product Hunt
+        date: 2025
+        summary: Recognition for oioi, a lightweight macOS clipboard overlay.
+
+    Certificates:
+      - name: NVIDIA State of the Art Deep Learning 101
+        issuer: NVIDIA
+        date: 2025-02
+      - name: IBM Machine Learning with Python
+        issuer: IBM
+        date: 2025-02
+      - name: IBM Accelerating Deep Learning with GPUs
+        issuer: IBM
+        date: 2025-02
