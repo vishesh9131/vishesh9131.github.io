@@ -1,4 +1,14 @@
 /* Portfolio-specific project presentation */
+:root {
+  --global-theme-color: #000;
+  --global-hover-color: #000;
+}
+
+html[data-theme="dark"] {
+  --global-theme-color: #fff;
+  --global-hover-color: #fff;
+}
+
 .projects {
   margin-top: 2.75rem;
 
@@ -130,6 +140,17 @@ html[data-theme="dark"] .projects .project-card:focus-within {
 }
 
 @media (max-width: 767px) {
+  .post > article > .profile.float-right {
+    float: none !important;
+    margin: 0 auto 1.5rem;
+    max-width: 14rem;
+    width: min(68vw, 14rem);
+  }
+
+  .post > article > .profile .more-info {
+    text-align: center;
+  }
+
   .projects {
     margin-top: 2rem;
 
