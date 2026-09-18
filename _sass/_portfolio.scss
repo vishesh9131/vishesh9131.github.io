@@ -133,9 +133,26 @@ html[data-theme="dark"] .projects .project-card:focus-within {
   .projects {
     margin-top: 2rem;
 
+    .row {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: minmax(0, 1fr);
+      margin: 0;
+    }
+
     h2.category {
       font-size: 1.25rem;
       margin-top: 2.25rem;
+    }
+
+    .project-card-column {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+
+    .project-card .card-body {
+      padding: 1.1rem;
     }
   }
 }
